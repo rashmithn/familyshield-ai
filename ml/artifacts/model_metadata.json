@@ -1,0 +1,20 @@
+{
+  "version": "synthetic-v1",
+  "trained_at": "2026-11-24T09:26:33.641683Z",
+  "dataset_size": 204,
+  "synthetic_only": true,
+  "data_source": "ml/dataset.py \u2014 invented examples only; no real user messages",
+  "labels": [
+    "safe",
+    "scam"
+  ],
+  "vectorizer": "TF-IDF word 1-2 grams",
+  "classifier": "LogisticRegression (class_weight=balanced)",
+  "metrics_on_training_data": {
+    "training_accuracy": 1.0,
+    "training_precision": 1.0,
+    "training_recall": 1.0,
+    "training_f1": 1.0
+  },
+  "warning": "Indicative signal only; not validated on real scam data."
+}

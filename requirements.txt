@@ -1,0 +1,23 @@
+# FamilyShield AI — backend + ML requirements
+# Verified on Python 3.13.0 (Windows). All listed versions install cleanly on 3.13.
+
+fastapi>=0.115,<1
+uvicorn[standard]>=0.34,<1
+SQLAlchemy>=2.0,<2.1
+pydantic>=2.10,<3
+pydantic-settings>=2.7,<3
+email-validator>=2.2,<3          # required by Pydantic EmailStr
+alembic>=1.14,<2
+PyJWT>=2.10,<3
+bcrypt>=4.2,<5                   # native wheel available for 3.13; no passlib needed
+httpx>=0.28,<1
+scikit-learn>=1.6,<2
+joblib>=1.4,<2
+numpy>=2.0,<3
+pytest>=8.3,<10
+aiosqlite>=0.20,<1               # optional async SQLite driver for Alembic/dev scripts
+
+# Notes on Python 3.13 compatibility:
+# - passlib is NOT used: its bcrypt backend wrapper emits warnings / breaks with
+#   bcrypt 4.x on Python 3.13. We call bcrypt directly (see backend/security.py).
+# - PyJWT, SQLAlchemy 2.x, Pydantic v2 and scikit-learn all ship cp313 wheels.
