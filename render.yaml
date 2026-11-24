@@ -1,0 +1,50 @@
+# Render Blueprint for FamilyShield AI.
+# Deploy this repository as a Blueprint, or copy the settings into a manual Web Service.
+# The frontend is a separate Static Site so the API and UI can scale independently.
+
+databases:
+  - name: familyshield-db
+    plan: free
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: familyshield-api
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    preDeployCommand: alembic -c backend/alembic.ini upgrade head
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: familyshield-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
+      - key: DEV_AUTO_CREATE_TABLES
+        value: "false"
+      - key: SAFE_URL_PROBE
+        value: "false"
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "20"
+      - key: CORS_ORIGINS
+        value: https://familyshield-frontend.onrender.com
+      - key: FRONTEND_BASE_URL
+        value: https://familyshield-frontend.onrender.com
+      # Optional. Add these in the Render dashboard when you have keys:
+      # GROQ_API_KEY
+      # GOOGLE_SAFE_BROWSING_API_KEY
+
+  - type: static
+    name: familyshield-frontend
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://familyshield-api.onrender.com
