@@ -11,11 +11,11 @@ Could not read package.json: /opt/render/project/src/package.json
 
 That means the Render service was created as a **Node service** with the default start command `npm start`. The repository root contains the Python backend, not a `package.json`. The fix is to set the service runtime to **Python** and use a Uvicorn start command.
 
-A ready-made blueprint is included at `render.yaml`, and `runtime.txt` pins Python 3.13 (the version tested locally).
+A ready-made blueprint is included at `render.yaml`, and `.python-version` pins Python 3.13 (the version tested locally).
 
 ## Option A — Deploy with the blueprint (recommended)
 
-1. Push the latest commit (including `render.yaml` and `runtime.txt`).
+1. Push the latest commit (including `render.yaml` and `.python-version`).
 2. In Render, choose **New → Blueprint**.
 3. Connect the GitHub repository `rashmithn/familyshield-ai`.
 4. Render will create:
@@ -37,6 +37,9 @@ In your Render web service settings:
 | Build Command | `pip install -r requirements.txt` |
 | Start Command | `uvicorn backend.main:app --host 0.0.0.0 --port $PORT` |
 | Health Check Path | `/health` |
+| Pre-Deploy Command | `alembic -c backend/alembic.ini upgrade head` |
+
+Do not put `alembic` or `uvicorn` in the build command. The build command only installs dependencies; `alembic` does not exist until that step finishes. Migrations belong in the pre-deploy command, and Uvicorn belongs in the start command.
 
 Environment variables:
 
