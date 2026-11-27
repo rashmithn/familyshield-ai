@@ -26,3 +26,5 @@ ml/artifacts/*.joblib
 .DS_Store
 Thumbs.db
 .tools/
+
+.vercel
