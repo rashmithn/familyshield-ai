@@ -34,12 +34,11 @@ In your Render web service settings:
 | --- | --- |
 | Runtime | **Python 3** |
 | Root Directory | leave empty (repository root) |
-| Build Command | `pip install -r requirements.txt` |
+| Build Command | `pip install -r requirements.txt && alembic -c backend/alembic.ini upgrade head` |
 | Start Command | `uvicorn backend.main:app --host 0.0.0.0 --port $PORT` |
 | Health Check Path | `/health` |
-| Pre-Deploy Command | `alembic -c backend/alembic.ini upgrade head` |
 
-Do not put `alembic` or `uvicorn` in the build command. The build command only installs dependencies; `alembic` does not exist until that step finishes. Migrations belong in the pre-deploy command, and Uvicorn belongs in the start command.
+On Render's free plan, the **Shell** and **Pre-Deploy Command** options are not available. Put installation and migration together in the Build Command, but keep Uvicorn only in the Start Command. The order matters: dependencies must be installed before `alembic` can run.
 
 Environment variables:
 
@@ -55,13 +54,7 @@ Environment variables:
 
 Optional keys: `GROQ_API_KEY`, `GOOGLE_SAFE_BROWSING_API_KEY`.
 
-After setting these, create a **Shell** tab in Render and run:
-
-```bash
-alembic -c backend/alembic.ini upgrade head
-```
-
-Or add that command as a **Pre-Deploy Command** in the service settings.
+No Render Shell is needed. The Build Command above applies migrations automatically after installing dependencies. If the first deploy fails while the database is still being created, click **Manual Deploy → Deploy latest commit** once the database status is **Available**.
 
 ## Deploy the frontend
 
