@@ -206,7 +206,7 @@ npm run build
 
 See `docs/SECURITY.md`. Highlights: bcrypt password hashing, JWT bearer auth, ORM-only database access, member-scoped authorization, rate-limited scanning, input length limits, secret redaction before persistence/display, no client-side API keys, no browser navigation to submitted URLs, and no execution of downloaded content.
 
-For Render deployment, see `docs/RENDER.md` and the ready-to-use `render.yaml` blueprint.
+For Render deployment, see `docs/RENDER.md` and the ready-to-use `render.yaml` blueprint. To host the frontend on Vercel and the API on Render, see `docs/VERCEL.md`.
 
 ---
 
