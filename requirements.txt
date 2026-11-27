@@ -4,6 +4,7 @@
 fastapi>=0.115,<1
 uvicorn[standard]>=0.34,<1
 SQLAlchemy>=2.0,<2.1
+psycopg2-binary>=2.9,<3           # PostgreSQL driver for SQLAlchemy on Render
 pydantic>=2.10,<3
 pydantic-settings>=2.7,<3
 email-validator>=2.2,<3          # required by Pydantic EmailStr
